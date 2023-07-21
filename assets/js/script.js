@@ -7,25 +7,22 @@ var h2El = document.createElement("h2");
 var pEl = document.createElement("p");
 var listEl = document.createElement("ul");
 var liEl = document.createElement("li");
-//Creates Answer text
 var answerText = document.createElement("div");
 //Static elements within HTML
 body.children[0].appendChild(h1El);
 body.children[0].appendChild(timer);
 h1El.textContent = "View Highscores";
-timer.textContent = "Time: 0";
-// Creates Question h2 on screen
+timer.textContent = "Time: ";
 main.appendChild(h2El);
-//Creates ul element
 main.appendChild(pEl);
 main.appendChild(liEl);
 main.appendChild(listEl);
 listEl.setAttribute ("class", "answers");
 
-// Global variables for score
+// Global variables for score, questions index, and timer
 var score = 0;
 var questionIndex =  0;
-
+var timeLeft = 30;
 
 //Landing Page Setup BEGIN
 var welcomeScreen = {
@@ -52,6 +49,21 @@ var questions = [
     }
 ]
 
+function setTime(){
+    var timeInterval = setInterval(function(){
+        timeLeft--;
+        timer.textContent = "Time: "+timeLeft;
+        if (timeLeft===0){
+            score = timeLeft;
+            clearInterval(timeInterval);
+            // this.setTimeout(removeOptions,300);
+        }else if(questionIndex===questions.length){
+            score = timeLeft;
+            clearInterval(timeInterval);
+        };
+    },1000);
+}
+
 //Creates li elements for each potential answer
 function loadOptions(){
     var index = 0;
@@ -75,10 +87,11 @@ h2El.textContent = '';
 
 // loads the next question and answers
 function loadQuestion(){
-if (questionIndex<questions.length){
-    h2El.textContent = questions[questionIndex].question;
-    loadOptions();
-}};   
+    if (questionIndex<questions.length){
+        h2El.textContent = questions[questionIndex].question;
+        loadOptions();
+    }
+};   
 
 // listens for correct answer to be selected
 addEventListener("click", function(event){
@@ -87,19 +100,21 @@ addEventListener("click", function(event){
         if (answer.textContent===questions[questionIndex].correct){
             score++;
             questionIndex++;
-            answerText.textContent = "Correct!";
-            // removeOptions();          
-            this.setTimeout(removeOptions,1000);
-            this.setTimeout(loadQuestion,1000);
+            answerText.textContent = "Correct!";     
+            this.setTimeout(removeOptions,300);
+            this.setTimeout(loadQuestion,300);
         }else if (answer.textContent==="Start Quiz"){
             main.removeChild(pEl);
-        main.removeChild(liEl);
-        loadQuestion();
+            main.removeChild(liEl);
+            setTime();
+            loadQuestion();
+        }else {
+            answerText.textContent = "Incorrect!";
+            questionIndex++;
+            timeLeft=timeLeft-10;
+            this.setTimeout(removeOptions,300);
+            this.setTimeout(loadQuestion,300);
         }
-        else
-        {answerText.textContent = "Incorrect!"
-        //ADD LOGIC FOR TIMMER HERE TO SUBTRACT 15 SECS!
-    }
     
 });
 
