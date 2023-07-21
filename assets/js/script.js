@@ -22,7 +22,7 @@ listEl.setAttribute ("class", "answers");
 // Global variables for score, questions index, and timer
 var score = 0;
 var questionIndex =  0;
-var timeLeft = 30;
+var timeLeft = 5;
 
 //Landing Page Setup BEGIN
 var welcomeScreen = {
@@ -56,10 +56,14 @@ function setTime(){
         if (timeLeft===0){
             score = timeLeft;
             clearInterval(timeInterval);
-            // this.setTimeout(removeOptions,300);
+            removeOptions();
         }else if(questionIndex===questions.length){
             score = timeLeft;
             clearInterval(timeInterval);
+        }else if (timeLeft<0){
+            score = 0;
+            clearInterval(timeInterval);
+            removeOptions();
         };
     },1000);
 }
