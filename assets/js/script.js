@@ -1,7 +1,6 @@
 //create document elements
 var body = document.body;
 var main = body.children[1].children[0];
-var h1El = document.createElement("h1");
 var timer = document.createElement("div");
 var h2El = document.createElement("h2");
 var pEl = document.createElement("p");
@@ -16,6 +15,8 @@ var input = document.createElement("input");
 var submit = document.createElement("input");
 form.setAttribute("id", "capture-scores");
 form.setAttribute("name", "capture-scores");
+form.setAttribute("action", "assets/html/highscores.html");
+form.setAttribute("method", "POST");
 form.setAttribute("onsubmit", "recordInitial()");
 label.setAttribute("for", "initials");
 input.setAttribute("type", "text");
@@ -25,9 +26,7 @@ submit.setAttribute("type", "submit");
 submit.setAttribute("value", "Submit");
 
 //Static elements within HTML
-body.children[0].appendChild(h1El);
 body.children[0].appendChild(timer);
-h1El.textContent = "View Highscores";
 timer.textContent = "Time: ";
 main.appendChild(h2El);
 main.appendChild(pEl);
@@ -50,11 +49,11 @@ var welcomeScreen = {
     info: "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!",
     button: "Start Quiz"
 }
-function init(){
+
     h2El.textContent = welcomeScreen.header;
     pEl.textContent = welcomeScreen.info;
     liEl.textContent = welcomeScreen.button;
-}
+
 
 // Question & Answers object array
 var questions = [
@@ -141,7 +140,7 @@ function recordInitial(){
         finScore: score
     };
         localStorage.setItem("finalScore",JSON.stringify(finalScore));
-        window.location.replace("./html/highscores.html");
+
 }
 
 // EventListener for "Start Quiz" button
@@ -170,7 +169,7 @@ answerbttn.addEventListener("click", function(event){
         }
 });
 
-init();
+
 
 
 
