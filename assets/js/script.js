@@ -141,9 +141,9 @@ function recordInitial(){
         finScore: score
     };
         localStorage.setItem("finalScore",JSON.stringify(finalScore));
-
-    
+        window.location.replace("./html/highscores.html");
 }
+
 // EventListener for "Start Quiz" button
 startbttn.addEventListener("click", function(){
             main.removeChild(pEl);
