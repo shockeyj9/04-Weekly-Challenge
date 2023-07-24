@@ -38,7 +38,7 @@ var answerbttn = document.querySelector(".answers");
 // Global variables for score, questions index, scorboard, and timer
 var score = 0;
 var questionIndex =  0;
-var timeLeft = 20;
+var timeLeft = 45;
 var initial = '';
 var timeInterval = '';
 var finalScore= [];
@@ -47,7 +47,7 @@ var finalScore= [];
 //Landing Page Setup BEGIN
 var welcomeScreen = {
     header: "Coding Quiz Challenge",
-    info: "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!",
+    info: "Try to answer the following code-related questions within the time limit. You will have 45 seconds to complete the quiz. Keep in mind that incorrect answers will penalize your score/time by ten seconds!",
     button: "Start Quiz"
 }
 
@@ -116,7 +116,9 @@ function setScore(){
         clearInterval(timeInterval);
         removeOptions();
         loadFinished();
-    };
+    }else{
+        score = timeLeft;
+    }
     console.log(score);
 }
 

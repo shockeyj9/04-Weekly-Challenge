@@ -3,7 +3,7 @@ var clearHighscore = document.getElementById("clear-highscores");
 
 function renderFinalScore(){
     var storedScores = JSON.parse(localStorage.getItem("finalScore"));
-    var sortedScores = storedScores.sort(
+    var storedScores = storedScores.sort(
       (p1,p2) => (p1.score < p2.score) ? 1 : (p1.score>p2.score) ? -1 : 0
     );
 
