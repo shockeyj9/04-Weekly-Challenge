@@ -8,16 +8,13 @@ var listEl = document.createElement("ul");
 var liEl = document.createElement("li");
 var answerText = document.createElement("div");
 
-//FORM
+//FORM elements
 var form = document.createElement("form");
 var label = document.createElement("label");
 var input = document.createElement("input");
 var submit = document.createElement("input");
 form.setAttribute("id", "capture-scores");
 form.setAttribute("name", "capture-scores");
-form.setAttribute("action", "assets/html/highscores.html");
-form.setAttribute("method", "POST");
-form.setAttribute("onsubmit", "recordInitial()");
 label.setAttribute("for", "initials");
 input.setAttribute("type", "text");
 input.setAttribute("id", "initials");
@@ -38,10 +35,14 @@ listEl.setAttribute ("class", "answers");
 var startbttn = document.querySelector(".start");
 var answerbttn = document.querySelector(".answers");
 
-// Global variables for score, questions index, and timer
+// Global variables for score, questions index, scorboard, and timer
 var score = 0;
 var questionIndex =  0;
 var timeLeft = 20;
+var initial = '';
+var timeInterval = '';
+var finalScore= [];
+
 
 //Landing Page Setup BEGIN
 var welcomeScreen = {
@@ -50,9 +51,16 @@ var welcomeScreen = {
     button: "Start Quiz"
 }
 
+// content for when the Quiz Loads
+function startScreen(){
     h2El.textContent = welcomeScreen.header;
     pEl.textContent = welcomeScreen.info;
     liEl.textContent = welcomeScreen.button;
+    var storedFinalScore = JSON.parse(localStorage.getItem("finalScore"));
+    if (storedFinalScore !== null){
+        finalScore = storedFinalScore;
+    }
+}
 
 
 // Question & Answers object array
@@ -64,30 +72,54 @@ var questions = [
         correct: "3.Quotes"
     },
     {  
-        question: "Test",
-        options: ["1.something","2.something","3.something","4.something"],
-        correct: "3.something"
-    }
+        question: "Is Javascript a case-sensitive language",
+        options: ["1.Yes","2.No"],
+        correct: "1.Yes"
+    },
+    {  
+        question: "Javascript is an ____ language?",
+        options: ["1.Object-Oriented","2.Object-Based","3.Procedural","4.None of the above"],
+        correct: "1.Object-Oriented"
+    },
+    {  
+        question: "Which of the following keywords is used to define a variable in Javascript?",
+        options: ["1.var","2.let","3.Both 1 and 2","4.None of the above"],
+        correct: "3.Both 1 and 2"
+    },
+    {  
+        question: "Which of the following methods is used to access HTML elements using Javascript",
+        options: ["1.getElementbyId()","2.getElementsByClassName()","3.Both 1 and 2", "4.None of the above"],
+        correct: "3.Both 1 and 2"
+    },
+    {  
+        question: "Upon encountering empty statements, what does the Javascript Interpreter do?",
+        options: ["1.Throws an error","2.Ignores the statements", "3.Gives a warning", "4.None of the above"],
+        correct: "2.Ignores the statements"
+    },
 ]
-
+// Timer 
 function setTime(){
-    var timeInterval = setInterval(function(){
+    timeInterval = setInterval(function(){
         timeLeft--;
         timer.textContent = "Time: "+timeLeft;
-        if (timeLeft===0){
-            score = timeLeft;
-            clearInterval(timeInterval);
-            removeOptions();
-        }else if(questionIndex===questions.length){
-            score = timeLeft;
-            clearInterval(timeInterval);
-        }else if (timeLeft<0){
-            score = 0;
-            clearInterval(timeInterval);
-            removeOptions();
-        };
+        setScore();
     },1000);
+};
+
+// Setting Score
+function setScore(){
+    if (timeLeft>0 && questionIndex===questions.length){
+        score = timeLeft;
+        clearInterval(timeInterval);
+    } else if (timeLeft<=0){
+        score = 0;
+        clearInterval(timeInterval);
+        removeOptions();
+        loadFinished();
+    };
+    console.log(score);
 }
+
 
 //Creates li elements for each potential answer
 function loadOptions(){
@@ -102,46 +134,44 @@ function loadOptions(){
 
 // clears the slate when correct answer is selected
 function removeOptions(){
-while(main.children[1].firstChild){
-main.children[1].removeChild(main.children[1].firstChild);
-}
-main.removeChild(main.children[2]);
-h2El.textContent = '';
+    var list = main.querySelectorAll("li");
+    var list2 = main.querySelectorAll("div");
+        list.forEach(lis =>{
+            lis.remove();
+        });
+        list2.forEach(lis =>{
+            lis.remove();
+        });
 }
 
 // loads the next question and answers
 function loadQuestion(){
+ 
     if (questionIndex<questions.length){
         h2El.textContent = questions[questionIndex].question;
         loadOptions();
     }else{
         loadFinished ();
     }
-};   
+}   
 
 // loads the final page after quiz is completed
 function loadFinished (){
-    score = timeLeft;
     h2El.textContent = "All Done!";
     main.appendChild(pEl);
     pEl.textContent = "Your final score is "+ score +"."
     main.appendChild(form);
-    main.children[3].appendChild(label);
-    main.children[3].appendChild(input);
-    main.children[3].appendChild(submit);
-
+    formNode = main.children[3]
+    formNode.appendChild(label);
+    formNode.appendChild(input);
+    formNode.appendChild(submit);
     label.textContent = "Enter initials";
-}
+};
 
-function recordInitial(){
-    var initial = document.forms["capture-scores"]["initials"].value;
-    var finalScore= {
-        userInitials: initial,
-        finScore: score
-    };
-        localStorage.setItem("finalScore",JSON.stringify(finalScore));
-
-}
+// stores initials & score to local memory
+function recordFinalScore(){
+    localStorage.setItem("finalScore", JSON.stringify(finalScore));
+};
 
 // EventListener for "Start Quiz" button
 startbttn.addEventListener("click", function(){
@@ -169,8 +199,22 @@ answerbttn.addEventListener("click", function(event){
         }
 });
 
+// Eventlistener for Submit button on form
+addEventListener("submit", function(event){
+    event.preventDefault();
+    initial = document.querySelector("#initials").value ;
+    if (initial=== ""){
+        this.alert('Initials cannot be blank to be added to highscores');
+        return;
+    } else{
+        finalScore.push({initial, score});
+        recordFinalScore();
+        this.window.location.href = "assets/html/highscores.html";
+    }
+})
 
-
+//Starts the process over when the screen is reloaded
+addEventListener("load", startScreen);
 
 
 
