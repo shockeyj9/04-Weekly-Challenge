@@ -1,3 +1,9 @@
+:root{
+    --bttnclr: blueviolet;
+    --bttnshdw: rgb(73, 35, 108);
+    --txtclr: white;
+    --sectnshdw: rgb(128, 128, 128, 0.568);
+}
 *{
     font-size: 15px;
     font-weight: normal;
@@ -6,7 +12,6 @@ header {
     display: flex;
     justify-content: space-between;
     padding: 8px;
-
 }
 main{
     display: flex;
@@ -16,11 +21,10 @@ main{
 section{
     padding: 2%;
     text-align: left;
-    box-shadow: 0px 0px 10px 3px rgba(128, 128, 128, 0.568);
+    box-shadow: 0px 0px 10px 3px var(--sectnshdw);
     border-radius: 5px;
     width: 75%;
 }
-
 h2{
     font-size: 25px;
     font-weight:bold;
@@ -35,16 +39,6 @@ div{
     color: rgba(96, 92, 92, 0.753);
     padding: 5px;
 }
-li{
-    list-style: none;
-    background-color: blueviolet;
-    color: white;
-    width: fit-content;
-    padding:  5px ;
-    border-radius: 5px;
-    margin: 10px;
-    box-shadow: 2px 2px rgb(73, 35, 108);
-}
 li:hover, input:hover, button:hover{
     cursor: pointer;
 }
@@ -52,30 +46,37 @@ li:hover, input:hover, button:hover{
     position: relative;
     left: 100%;
 }
-input[type="submit"]  {
-    background-color: blueviolet;
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    padding: 3px 5px;
-    color: white;
-    box-shadow: 2px 2px rgb(73, 35, 108);
+.answers li, .start,
+button, input[type="submit"]{
+    background-color: var(--bttnclr);
+    color: var(--txtclr); 
+    border-radius: 5px; 
+    box-shadow: 2px 2px var(--bttnshdw);
 }
-button{
-    background-color: blueviolet;
+.answers li, .start{
+    list-style: none;
+    width: fit-content;
+    padding:  5px ;
+    margin: 10px;
+}
+button, input[type="submit"]  {
     border: none;
-    border-radius: 5px;
     margin: 5px;
     padding: 3px 5px;
-    color: white;
-    box-shadow: 2px 2px rgb(73, 35, 108);
 }
 label{
     padding: 0 5px 0 0;
 }
 a{
     text-decoration: none;
-    color: blueviolet;
+    color: var(--bttnclr);
+}
+#highscore{
+    background-color: rgba(156, 81, 226, 0.541);
+    list-style-type: style;
+    width: 20%;
+    margin: 1%;
+    padding: 3px;
 }
 
 @media screen and (max-width:503px ) {
