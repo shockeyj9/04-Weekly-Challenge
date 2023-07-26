@@ -25,7 +25,9 @@ addEventListener("load", renderFinalScore );
 
 // Back button takes you Quiz
 goBack.addEventListener("click", function(event){
-  history.back();
+  // history.back();
+  // this.window.location.href = "assets/html/highscores.html";
+  window.location.href = "../../index.html";
 });
 
 // Clears history
